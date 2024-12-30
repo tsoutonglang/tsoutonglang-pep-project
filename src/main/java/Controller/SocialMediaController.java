@@ -4,35 +4,27 @@ import Model.Account;
 import Model.Message;
 import Service.AccountService;
 import Service.MessageService;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
-/**
+/*
  * TODO: You will need to write your own endpoints and handlers for your controller. 
- * The endpoints you will need can be found in readme.md as well as the test cases. 
- * 
- * POST localhost:8080/
- *  process new user registrations and user logins
- *  process the creation of new messages
- * 
- * GET localhost:8080/
- *  retrieve all messages or by its id
- * 
- * DELETE localhost:8080/messages/{message_id}
- *  delete a message
- * 
- * PATCH localhost:8080/messages/{message_id}
- *  edit a message
- * 
- * GET localhost:8080/accounts/{account_id}/messages
- *  get a message by a user
- * 
- * You should refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
  */
+
 public class SocialMediaController {
-AccountService accountService;
-MessageService messageService;
+    AccountService accountService;
+    MessageService messageService;
+
+    /* 
+     * No-args constructor for service classes.
+     */
+    public SocialMediaController() {
+        this.accountService = new AccountService();
+        this.messageService = new MessageService();
+    }
 
     /**
      * In order for the test cases to work, you will need to write the endpoints in the startAPI() method, as the test
@@ -41,59 +33,65 @@ MessageService messageService;
      */
     public Javalin startAPI() {
         Javalin app = Javalin.create();
-        app.get("example-endpoint", this::exampleHandler);
-        app.post("/register", this::postAccountRegHandler);
-        app.post("/login", this::postAccountLoginUserHandler);
 
-        app.post("/messages", this::postMessageHandler);
-        app.get("/messages", this::getMessageHandler);
-
-        app.delete("/messages", this::deleteMessage);
-
-        app.patch("/messages", this::editMessageHandler);
-
-        app.get("messages", this::getMessageUserHandler);
-
-        app.start(8000);
+        app.post("/register", this::postAccountRegistrationHandler);
 
         return app;
     }
 
     /**
-     * This is an example handler for an example endpoint.
-     * @param context The Javalin Context object manages information about both the HTTP request and response.
+     * Handler to post a new author.
+     * The JSON ObjectMapper will automatically convert the JSON of the POST request into an Account object.
+     * If AccountService returns a null account (meaning posting an Account was unsuccessful), the API will return a 400
+     * message (client error).
+     * @param ctx the context object handles information HTTP requests and generates responses within Javalin. It will
+     *            be available to this method automatically thanks to the app.post method.
+     * @throws JsonProcessingException will be thrown if there is an issue converting JSON into an object.
      */
-    private void exampleHandler(Context context) {
-        context.json("sample text");
-    }
-
-    /**
-     * Handler to post a new user.
-     * The registration will be successful if and only if the username is not blank, the password is at least 4 characters long, 
-     * and an Account with that username does not already exist. If all these conditions are met, the response body should contain a 
-     * JSON of the Account, including its account_id. 
-     * The response status should be 200 OK, which is the default. The new account should be persisted to the database.
-     * If the registration is not successful, the response status should be 400. (Client error)
-     * @param ctx The Javalin Context object manages information about both the HTTP request and response.
-     * @throws JsonProcessingException will be thrown if there is an issue
-     */
-    private void postAccountRegHandler(Context ctx) {
+    private void postAccountRegistrationHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-
-        // create an Account object
         Account account = mapper.readValue(ctx.body(), Account.class);
+        Account addedAccount = accountService.addAccount(account);
 
-        // call the service method to register the account
-        Account addedAccount = accountService.addedAccount(account);
-
-        // check if the registration was successful
-        if(addedAccount == null){
-            ctx.status(400);
-        } else{
-            ctx.status(200);
+        if(addedAccount != null) {
             ctx.json(mapper.writeValueAsString(addedAccount));
+        } else{ 
+            ctx.status(400);
         }
     }
 
+    /* 
+     * TODO: POST localhost:8080/login : process User logins
+     * Handler to process user logins.
+     */
 
+     /*
+      * TODO: POST localhost:8080/messages : process the creation of new messages
+      * Handler to post new messages.
+      */
+
+     /*
+      * TODO: GET localhost:8080/messages : retrieve all messages
+      * Handler to retrieve all messages.
+      */
+      
+     /* 
+      * TODO: GET localhost:8080/messages/{message_id} : retrieve a message by its ID
+      * Handler to retrieve a message by its ID.
+      */
+
+     /* 
+      * TODO: DELETE localhost:8080/messages/{message_id} : delete a message identified by a message ID
+      * Handler to delete a message by its ID.
+      */
+
+     /* 
+      * TODO: PATCH localhost:8080/messages/{message_id} : update a message text identified by a message ID
+      * Handler to update a messages by its ID.
+      */
+      
+     /*
+      * TODO: GET localhost:8080/accounts/{account_id}/messages : retrieve all messages written by a particular user
+      * Handler to retrieve all messages by a user.
+      */
 }
