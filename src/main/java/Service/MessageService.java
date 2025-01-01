@@ -44,8 +44,6 @@ public class MessageService {
         } else {
             return null;
         }
-
-        return message;
     }
 
     /* 

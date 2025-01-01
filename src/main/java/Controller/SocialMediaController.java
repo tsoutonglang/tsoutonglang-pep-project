@@ -41,7 +41,7 @@ public class SocialMediaController {
     }
 
     /**
-     * Handler to post a new author.
+     * Handler to post a new user.
      * If successful: 200
      * If not successful: 400
      */

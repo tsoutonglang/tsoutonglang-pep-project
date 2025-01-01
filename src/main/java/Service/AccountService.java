@@ -40,7 +40,7 @@ public class AccountService {
         }
 
         // Add account
-        System.out.println("Account object created :)");
+        System.out.println("Account created :)");
         return accountDAO.createAccount(account);
     }
     
@@ -76,7 +76,7 @@ public class AccountService {
         // Password must match username.
         Account foundAcc = accountDAO.findPassword(username);
 
-        if (foundAcc.getPassword() != password) {
+        if (foundAcc.getPassword() == password) {
             System.out.println("Password matches username.");
             return foundAcc;
         } else {

@@ -16,22 +16,17 @@ public class AccountDAO {
     Connection connection = ConnectionUtil.getConnection();
 
     /* 
-     * @param An Account object.
-     * @return If a new account was added, null if it wasn't.
+     * Insert the account into the database.
      */
     public Account createAccount(Account account) {
         try {
             String sql = "INSERT INTO account (username, password) VALUES (?, ?)";
 
-            // Insert user info into sql statement
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, account.getUsername());
             ps.setString(2, account.getPassword());
             ps.executeUpdate();
 
-            System.out.println("Account added to database :)");
-
-            // Generate the account id
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
                 int generated_account_id = rs.getInt(1);
@@ -47,16 +42,15 @@ public class AccountDAO {
     }
 
     /*
-     * Search for the account through the id
+     * Search for the account through the id.
      */
     public Account findAccountID(int accountID) {
         try {
             String sql = "SELECT * FROM account WHERE account_id = ?";
-            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, accountID);
             ResultSet rs = ps.executeQuery();
 
-            // Return the found account
             while(rs.next()) {
                 Account account = new Account(
                     rs.getInt("account_id"),
@@ -74,23 +68,23 @@ public class AccountDAO {
     }
 
     /*
-     * Check if the username has already been registered.
-     * @param String username.
-     * @return Account found or null.
+     * Check if the username has been registered.
      */
     public Account getAccountByUsername(String username) {
         try {
             String sql = "SELECT * FROM account WHERE username = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
 
-            // if an account was found
-            Account account = new Account(
-                rs.getInt("account_id"),
-                rs.getString("username"),
-                rs.getString("password"));
+            while(rs.next()) {
+                Account account = new Account(
+                    rs.getInt("account_id"),
+                    rs.getString("username"),
+                    rs.getString("password"));
 
-            return account;
+                return account;
+            }
 
         } catch(SQLException e) {
             System.out.println(e.getMessage());
@@ -100,25 +94,24 @@ public class AccountDAO {
     }
 
     /* 
-     * @param Account username.
-     * @return Account if it was found, null if not.
+     * Find the account's password.
      */
 
     public Account findPassword(String username) {
         try {
             String sql = "SELECT * FROM account WHERE username = ?";
-            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, username);
-            System.out.println(ps.toString());
             ResultSet rs = ps.executeQuery();
 
-            // Return the found account
-            Account account = new Account(
-                rs.getInt("account_id"),
-                rs.getString("username"),
-                rs.getString("password"));
+            while(rs.next()) {
+                Account account = new Account(
+                    rs.getInt("account_id"),
+                    rs.getString("username"),
+                    rs.getString("password"));
 
-            return account;
+                return account;
+            }
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
