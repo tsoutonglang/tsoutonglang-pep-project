@@ -42,12 +42,8 @@ public class SocialMediaController {
 
     /**
      * Handler to post a new author.
-     * The JSON ObjectMapper will automatically convert the JSON of the POST request into an Account object.
-     * If AccountService returns a null account (meaning posting an Account was unsuccessful), the API will return a 400
-     * message (client error).
-     * @param ctx the context object handles information HTTP requests and generates responses within Javalin. It will
-     *            be available to this method automatically thanks to the app.post method.
-     * @throws JsonProcessingException will be thrown if there is an issue converting JSON into an object.
+     * If successful: 200
+     * If not successful: 400
      */
     private void postAccountRegistrationHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
@@ -62,8 +58,9 @@ public class SocialMediaController {
     }
 
     /* 
-     * TODO: POST localhost:8080/login : process User logins
      * Handler to process user logins.
+     * If successful: 200
+     * If not successful: 401
      */
     private void postLoginHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
@@ -80,30 +77,49 @@ public class SocialMediaController {
      /*
       * TODO: POST localhost:8080/messages : process the creation of new messages
       * Handler to post new messages.
+      * If successful: 200
+      * If not successful: 400
       */
+    private void postMessage(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Message message = mapper.readValue(ctx.body(), Message.class);
+        Message newMessage = messageService.newMessage(message);
+
+        if(newMessage != null) {
+            ctx.json(mapper.writeValueAsString(newMessage));
+        } else{ 
+            ctx.status(400);
+        }
+    }
 
      /*
       * TODO: GET localhost:8080/messages : retrieve all messages
       * Handler to retrieve all messages.
+      * If successful: 200
       */
       
      /* 
       * TODO: GET localhost:8080/messages/{message_id} : retrieve a message by its ID
       * Handler to retrieve a message by its ID.
+      * If successful: 200
       */
 
      /* 
       * TODO: DELETE localhost:8080/messages/{message_id} : delete a message identified by a message ID
       * Handler to delete a message by its ID.
+      * If successful: 200
       */
 
      /* 
       * TODO: PATCH localhost:8080/messages/{message_id} : update a message text identified by a message ID
       * Handler to update a messages by its ID.
+      * If successful: 200
+      * If not successful: 400
       */
       
      /*
       * TODO: GET localhost:8080/accounts/{account_id}/messages : retrieve all messages written by a particular user
       * Handler to retrieve all messages by a user.
+      * If successful: 200
       */
 }

@@ -47,18 +47,16 @@ public class AccountDAO {
     }
 
     /*
-     * Check if the username has already been registered.
-     * @param String username.
-     * @return Account found or null.
+     * Search for the account through the id
      */
-    public Account getAccountByUsername(String username) {
+    public Account findAccountID(int accountID) {
         try {
-            String sql = "SELECT * FROM account WHERE username = ?";
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, username);
+            String sql = "SELECT * FROM account WHERE account_id = ?";
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, accountID);
             ResultSet rs = ps.executeQuery();
 
-            // if an account was found
+            // Return the found account
             while(rs.next()) {
                 Account account = new Account(
                     rs.getInt("account_id"),
@@ -68,6 +66,32 @@ public class AccountDAO {
                 return account;
             }
 
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return null;
+    }
+
+    /*
+     * Check if the username has already been registered.
+     * @param String username.
+     * @return Account found or null.
+     */
+    public Account getAccountByUsername(String username) {
+        try {
+            String sql = "SELECT * FROM account WHERE username = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            // if an account was found
+            Account account = new Account(
+                rs.getInt("account_id"),
+                rs.getString("username"),
+                rs.getString("password"));
+
+            return account;
+
         } catch(SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -76,7 +100,6 @@ public class AccountDAO {
     }
 
     /* 
-     * TODO: process User logins.
      * @param Account username.
      * @return Account if it was found, null if not.
      */
@@ -90,14 +113,12 @@ public class AccountDAO {
             ResultSet rs = ps.executeQuery();
 
             // Return the found account
-            while(rs.next()) {
-                Account account = new Account(
-                    rs.getInt("account_id"),
-                    rs.getString("username"),
-                    rs.getString("password"));
+            Account account = new Account(
+                rs.getInt("account_id"),
+                rs.getString("username"),
+                rs.getString("password"));
 
-                return account;
-            }
+            return account;
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());

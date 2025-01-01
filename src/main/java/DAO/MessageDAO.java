@@ -3,8 +3,6 @@ package DAO;
 import Util.ConnectionUtil;
 import Model.Message;
 
-import java.sql.*;
-
 /*
  * table: message
  * message_id int primary key
@@ -15,5 +13,8 @@ import java.sql.*;
  */
 
 public class MessageDAO {
+    public Message postMessage(Message message) {
+
+    }
     
 }

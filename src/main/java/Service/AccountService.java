@@ -1,9 +1,7 @@
 package Service;
 
-import DAO.AccountDAO;
 import Model.Account;
-
-import java.util.List;
+import DAO.AccountDAO;
 
 public class AccountService {
     public AccountDAO accountDAO;
@@ -47,7 +45,6 @@ public class AccountService {
     }
     
     /* 
-     * TODO: process User logins.
      * Username and password provided in the request body JSON match a real account existing on the database.
      * @param Account object.
      * @return Account if it was succesfully found, null if not.
