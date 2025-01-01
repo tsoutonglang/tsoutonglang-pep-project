@@ -50,6 +50,7 @@ public class AccountService {
      * @return Account if it was succesfully found, null if not.
      */
     public Account loginAccount(Account account) {
+        System.out.println(account.toString());
         String username = account.getUsername();
         String password = account.getPassword();
 
@@ -65,20 +66,20 @@ public class AccountService {
             return null;
         }
 
+        Account foundAccount = accountDAO.getAccountByUsername(username);
+
         // Username must exist.
-        if (accountDAO.getAccountByUsername(username) != null) {
-            System.out.println("Username exists.");
-        } else {
+        if (foundAccount == null) {
             System.out.println("Username does not exist.");
             return null;
+        } else {
+            System.out.println("Username exists.");
         }
 
         // Password must match username.
-        Account foundAcc = accountDAO.findPassword(username);
-
-        if (foundAcc.getPassword() == password) {
+        if (foundAccount.getPassword().equals(account.getPassword())) {
             System.out.println("Password matches username.");
-            return foundAcc;
+            return foundAccount;
         } else {
             System.out.println("Password does not match username.");
             return null;

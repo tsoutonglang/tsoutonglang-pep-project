@@ -36,6 +36,7 @@ public class SocialMediaController {
 
         app.post("/register", this::postAccountRegistrationHandler);
         app.post("/login", this::postLoginHandler);
+        app.post("/messages", this::postNewMessage);
 
         return app;
     }
@@ -80,7 +81,7 @@ public class SocialMediaController {
       * If successful: 200
       * If not successful: 400
       */
-    private void postMessage(Context ctx) throws JsonProcessingException {
+    private void postNewMessage(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Message message = mapper.readValue(ctx.body(), Message.class);
         Message newMessage = messageService.newMessage(message);
