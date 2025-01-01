@@ -52,4 +52,39 @@ public class AccountService {
      * @param Account object.
      * @return Account if it was succesfully found, null if not.
      */
+    public Account loginAccount(Account account) {
+        String username = account.getUsername();
+        String password = account.getPassword();
+
+        // Username must not be blank.
+        if (username.isBlank()) {
+            System.out.println("Username is empty.");
+            return null;
+        }
+
+        // Password must not be blank.
+        if (password.isBlank()) {
+            System.out.println("Password is empty.");
+            return null;
+        }
+
+        // Username must exist.
+        if (accountDAO.getAccountByUsername(username) != null) {
+            System.out.println("Username exists.");
+        } else {
+            System.out.println("Username does not exist.");
+            return null;
+        }
+
+        // Password must match username.
+        Account foundAcc = accountDAO.findPassword(username);
+
+        if (foundAcc.getPassword() != password) {
+            System.out.println("Password matches username.");
+            return foundAcc;
+        } else {
+            System.out.println("Password does not match username.");
+            return null;
+        }
+    }
 }
