@@ -50,7 +50,6 @@ public class AccountService {
      * @return Account if it was succesfully found, null if not.
      */
     public Account loginAccount(Account account) {
-        System.out.println(account.toString());
         String username = account.getUsername();
         String password = account.getPassword();
 
@@ -77,7 +76,7 @@ public class AccountService {
         }
 
         // Password must match username.
-        if (foundAccount.getPassword().equals(account.getPassword())) {
+        if (foundAccount.getPassword().equals(password)) {
             System.out.println("Password matches username.");
             return foundAccount;
         } else {

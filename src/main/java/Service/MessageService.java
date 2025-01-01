@@ -40,9 +40,10 @@ public class MessageService {
 
         // Message should be posted by an existing username and user id
         if (accountDAO.findAccountID(message.getPosted_by()) == null) {
-            return messageDAO.postMessage(message);
-        } else {
             return null;
+        } else {
+            System.out.println("Message created :)");
+            return messageDAO.postMessage(message);
         }
     }
 

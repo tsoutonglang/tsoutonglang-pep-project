@@ -95,6 +95,7 @@ public class AccountDAO {
 
     /* 
      * Find the account's password.
+     * TODO: Delete at the end if i don't need it.
      */
 
     public Account findPassword(String username) {
