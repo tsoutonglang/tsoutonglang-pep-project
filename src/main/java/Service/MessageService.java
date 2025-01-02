@@ -4,6 +4,8 @@ import Model.Message;
 import DAO.MessageDAO;
 import DAO.AccountDAO;
 
+import java.util.List;
+
 public class MessageService {
     public MessageDAO messageDAO;
     public AccountDAO accountDAO;
@@ -18,7 +20,6 @@ public class MessageService {
 
 
     /*
-     * TODO: post new message.
      * Message shouldn't be blank.
      * Message should be less than 255 characters.
      * Posted by a real username and user_id
@@ -49,21 +50,29 @@ public class MessageService {
 
     /* 
     * TODO: Retrieve all messages
+    * @return List of all messages in the database
     */
+    public List<Message> getAllMessages() {
+        return messageDAO.getAllMessagesSent();
+    }
 
     /* 
      * TODO: Retrieve all messages by its ID
+     * @return Message object
      */
 
     /* 
      * TODO: Delete a message by its ID
+     * @return Successful deletion
      */
 
     /*
      * TODO: Update a message by its ID
+     * @return Message object
      */
 
     /* 
      * TODO: Retrieve all messages by a user
+     * @return Message object
      */
 }

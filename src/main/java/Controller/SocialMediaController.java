@@ -10,6 +10,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
+import java.util.List;
+
 /*
  * TODO: You will need to write your own endpoints and handlers for your controller. 
  */
@@ -36,7 +38,12 @@ public class SocialMediaController {
 
         app.post("/register", this::postAccountRegistrationHandler);
         app.post("/login", this::postLoginHandler);
-        app.post("/messages", this::postNewMessage);
+        app.post("/messages", this::postNewMessageHandler);
+        app.get("/messages", this::getAllMessagesHandler);
+        app.get("/messages/{message_id}", this::getMessageHandler);
+        app.delete("/messages/{message_id}", this::deleteMessageHandler);
+        app.patch("/messages/{message_id}", this::patchMessageHandler);
+        app.get("/accounts/{account_id}/messages", this::getAllUserMessagesHandler);
 
         return app;
     }
@@ -76,12 +83,11 @@ public class SocialMediaController {
     }
 
      /*
-      * TODO: POST localhost:8080/messages : process the creation of new messages
       * Handler to post new messages.
       * If successful: 200
       * If not successful: 400
       */
-    private void postNewMessage(Context ctx) throws JsonProcessingException {
+    private void postNewMessageHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Message message = mapper.readValue(ctx.body(), Message.class);
         Message newMessage = messageService.newMessage(message);
@@ -98,18 +104,28 @@ public class SocialMediaController {
       * Handler to retrieve all messages.
       * If successful: 200
       */
+    private void getAllMessagesHandler(Context ctx) {
+        List<Message> messages = messageService.getAllMessages();
+        ctx.json(messages);
+    }
       
      /* 
       * TODO: GET localhost:8080/messages/{message_id} : retrieve a message by its ID
       * Handler to retrieve a message by its ID.
       * If successful: 200
       */
+    private void getMessageHandler(Context ctx) {
+
+    }
 
      /* 
       * TODO: DELETE localhost:8080/messages/{message_id} : delete a message identified by a message ID
       * Handler to delete a message by its ID.
       * If successful: 200
       */
+    private void deleteMessageHandler(Context ctx) {
+
+    }
 
      /* 
       * TODO: PATCH localhost:8080/messages/{message_id} : update a message text identified by a message ID
@@ -117,10 +133,16 @@ public class SocialMediaController {
       * If successful: 200
       * If not successful: 400
       */
+    private void patchMessageHandler(Context ctx) {
+
+    }
       
      /*
       * TODO: GET localhost:8080/accounts/{account_id}/messages : retrieve all messages written by a particular user
       * Handler to retrieve all messages by a user.
       * If successful: 200
       */
+    private void getAllUserMessagesHandler(Context ctx) {
+
+    }
 }
