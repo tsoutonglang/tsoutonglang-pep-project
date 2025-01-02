@@ -19,6 +19,7 @@ import java.util.List;
 public class SocialMediaController {
     AccountService accountService;
     MessageService messageService;
+    ObjectMapper mapper;
 
     /* 
      * No-args constructor for service classes.
@@ -26,6 +27,7 @@ public class SocialMediaController {
     public SocialMediaController() {
         this.accountService = new AccountService();
         this.messageService = new MessageService();
+        this.mapper = new ObjectMapper();
     }
 
     /**
@@ -54,7 +56,6 @@ public class SocialMediaController {
      * If not successful: 400
      */
     private void postAccountRegistrationHandler(Context ctx) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
         Account account = mapper.readValue(ctx.body(), Account.class);
         Account addedAccount = accountService.addAccount(account);
 
@@ -71,7 +72,6 @@ public class SocialMediaController {
      * If not successful: 401
      */
     private void postLoginHandler(Context ctx) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
         Account account = mapper.readValue(ctx.body(), Account.class);
         Account foundAccount = accountService.loginAccount(account);
 
@@ -88,7 +88,6 @@ public class SocialMediaController {
       * If not successful: 400
       */
     private void postNewMessageHandler(Context ctx) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
         Message message = mapper.readValue(ctx.body(), Message.class);
         Message newMessage = messageService.newMessage(message);
 
@@ -100,13 +99,11 @@ public class SocialMediaController {
     }
 
      /*
-      * TODO: GET localhost:8080/messages : retrieve all messages
       * Handler to retrieve all messages.
       * If successful: 200
       */
     private void getAllMessagesHandler(Context ctx) {
-        List<Message> messages = messageService.getAllMessages();
-        ctx.json(messages);
+        ctx.json(messageService.getAllMessages());
     }
       
      /* 
@@ -114,8 +111,16 @@ public class SocialMediaController {
       * Handler to retrieve a message by its ID.
       * If successful: 200
       */
-    private void getMessageHandler(Context ctx) {
+    private void getMessageHandler(Context ctx) throws JsonProcessingException {
+        // int messageID = Integer.parseInt(ctx.body());
+        int messageID = Integer.parseInt(ctx.pathParam("message_id"));
+        Message message = messageService.findMessageByID(messageID);
 
+        if (message != null) {
+            ctx.json(message);
+        } else {
+            ctx.status(200).result("");
+        }
     }
 
      /* 

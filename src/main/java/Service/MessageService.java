@@ -49,10 +49,10 @@ public class MessageService {
     }
 
     /* 
-    * TODO: Retrieve all messages
     * @return List of all messages in the database
     */
     public List<Message> getAllMessages() {
+        System.out.println("All messages available retrieved");
         return messageDAO.getAllMessagesSent();
     }
 
@@ -60,6 +60,11 @@ public class MessageService {
      * TODO: Retrieve all messages by its ID
      * @return Message object
      */
+    public Message findMessageByID(int messageID) {
+        System.out.println("Retrieved message ID: " + messageID);
+        System.out.println("Message retrieved");
+        return messageDAO.findMessagesByID(messageID);
+    }
 
     /* 
      * TODO: Delete a message by its ID

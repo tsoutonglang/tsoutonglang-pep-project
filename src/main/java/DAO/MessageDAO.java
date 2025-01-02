@@ -47,7 +47,6 @@ public class MessageDAO {
     }
 
     /* 
-     * TODO: get all messages in the database
      * @return all messages
      */
     public List<Message> getAllMessagesSent() {
@@ -78,6 +77,30 @@ public class MessageDAO {
      * TODO: Retrieve all messages by its ID
      * @return Message object
      */
+    public Message findMessagesByID(int messageID) {
+        try {
+            String sql = "SELECT * FROM message WHERE message_id = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, messageID);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Message foundMessage = new Message(
+                    rs.getInt("message_id"),
+                    rs.getInt("posted_by"),
+                    rs.getString("message_text"),
+                    rs.getLong("time_posted_epoch")
+                );
+
+                System.out.println(foundMessage.toString());
+                return foundMessage;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return null;
+    }
 
     /* 
      * TODO: Delete a message by its ID
