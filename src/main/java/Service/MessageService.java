@@ -57,25 +57,27 @@ public class MessageService {
     }
 
     /* 
+     * Message ID should exist.
      * @return Message object
      */
     public Message findMessageByID(int messageID) {
-        System.out.println("Retrieved message ID: " + messageID);
-        System.out.println("Message retrieved");
+        System.out.println("Message ID: " + messageID);
         return messageDAO.findMessagesByID(messageID);
     }
 
     /* 
+     * Message ID should exist.
      * @return Successful deletion
      */
     public Message deleteMessageByID(int messageID) {
         System.out.println("Retrieved message ID: " + messageID);
-        System.out.println("Message deleted");
         return messageDAO.deleteMessage(messageID);
     }
 
     /*
-     * TODO: Update a message by its ID
+     * Message shouldn't be blank.
+     * Message should be less than 255 characters.
+     * Message ID should exist.
      * @return Message object
      */
     public Message updateMessage(int messageID, String updatedText) {
@@ -105,7 +107,12 @@ public class MessageService {
     }
 
     /* 
-     * TODO: Retrieve all messages by a user
+     * Account ID should exist.
      * @return Message object
      */
+    public List<Message> getAllUserMessages(int accountID) {
+        System.out.println("Account ID: " + accountID);
+        System.out.println("All messages available retrieved");
+        return messageDAO.getAllUserMessages(accountID);
+    }
 }

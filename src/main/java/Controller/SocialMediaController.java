@@ -137,7 +137,6 @@ public class SocialMediaController {
     }
 
      /* 
-      * TODO: PATCH localhost:8080/messages/{message_id} : update a message text identified by a message ID
       * Handler to update a messages by its ID.
       * If successful: 200
       * If not successful: 400
@@ -155,11 +154,11 @@ public class SocialMediaController {
     }
       
      /*
-      * TODO: GET localhost:8080/accounts/{account_id}/messages : retrieve all messages written by a particular user
       * Handler to retrieve all messages by a user.
       * If successful: 200
       */
     private void getAllUserMessagesHandler(Context ctx) {
-
+        int accountID = Integer.parseInt(ctx.pathParam("account_id"));
+        ctx.json(messageService.getAllUserMessages(accountID));
     }
 }

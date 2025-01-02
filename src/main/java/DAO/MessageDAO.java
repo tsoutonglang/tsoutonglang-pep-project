@@ -84,15 +84,15 @@ public class MessageDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                Message foundMessage = new Message(
+                Message message = new Message(
                     rs.getInt("message_id"),
                     rs.getInt("posted_by"),
                     rs.getString("message_text"),
                     rs.getLong("time_posted_epoch")
                 );
 
-                System.out.println(foundMessage.toString());
-                return foundMessage;
+                System.out.println("Found message:\n" + message.toString());
+                return message;
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -113,14 +113,14 @@ public class MessageDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                Message foundMessage = new Message(
+                Message message = new Message(
                     rs.getInt("message_id"),
                     rs.getInt("posted_by"),
                     rs.getString("message_text"),
                     rs.getLong("time_posted_epoch")
                 );
 
-                System.out.println(foundMessage.toString());
+                System.out.println("Deleted message:\n" + message.toString());
 
                 // Delete the message if found
                 sql = "DELETE FROM message WHERE message_id = ?";
@@ -128,7 +128,7 @@ public class MessageDAO {
                 ps.setInt(1, messageID);
                 ps.executeUpdate();
 
-                return foundMessage;
+                return message;
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -138,7 +138,6 @@ public class MessageDAO {
     }
 
     /*
-     * TODO: Update a message by its ID
      * @return Message object
      */
     public Message updateMessage(int messageID, String updatedText) {
@@ -150,13 +149,13 @@ public class MessageDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                Message foundMessage = new Message(
+                Message message = new Message(
                     rs.getInt("message_id"),
                     rs.getInt("posted_by"),
                     rs.getString("message_text"),
                     rs.getLong("time_posted_epoch")
                 );
-                foundMessage.setMessage_text(updatedText);
+                message.setMessage_text(updatedText);
 
                 // Update message
                 sql = "UPDATE message SET message_text = ? WHERE message_id = ?";
@@ -165,7 +164,8 @@ public class MessageDAO {
                 ps.setInt(2, messageID);
                 ps.executeUpdate();
 
-                return foundMessage;
+                System.out.println("Updated message:\n" + message.toString());
+                return message;
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -175,7 +175,31 @@ public class MessageDAO {
     }
 
     /* 
-     * TODO: Retrieve all messages by a user
      * @return Message object
      */
+    public List<Message> getAllUserMessages(int accountID) {
+        List<Message> messages = new ArrayList<>();
+
+        try {
+            String sql = "SELECT * FROM message WHERE posted_by = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, accountID);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Message message = new Message(
+                    rs.getInt("message_id"),
+                    rs.getInt("posted_by"),
+                    rs.getString("message_text"),
+                    rs.getLong("time_posted_epoch")
+                );
+
+                messages.add(message);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return messages;
+    }
 }

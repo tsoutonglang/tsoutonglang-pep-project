@@ -91,33 +91,4 @@ public class AccountDAO {
 
         return null;
     }
-
-    /* 
-     * Find the account's password.
-     * TODO: Delete at the end if i don't need it.
-     */
-
-    public Account findPassword(String username) {
-        try {
-            String sql = "SELECT * FROM account WHERE username = ?";
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, username);
-            ResultSet rs = ps.executeQuery();
-
-            while(rs.next()) {
-                Account account = new Account(
-                    rs.getInt("account_id"),
-                    rs.getString("username"),
-                    rs.getString("password"));
-
-                return account;
-            }
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-
-        return null;
-    }
-
 }
