@@ -57,7 +57,6 @@ public class MessageService {
     }
 
     /* 
-     * TODO: Retrieve all messages by its ID
      * @return Message object
      */
     public Message findMessageByID(int messageID) {
@@ -70,6 +69,11 @@ public class MessageService {
      * TODO: Delete a message by its ID
      * @return Successful deletion
      */
+    public Message deleteMessageByID(int messageID) {
+        System.out.println("Retrieved message ID: " + messageID);
+        System.out.println("Message deleted");
+        return messageDAO.deleteMessage(messageID);
+    }
 
     /*
      * TODO: Update a message by its ID

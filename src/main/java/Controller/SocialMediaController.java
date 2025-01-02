@@ -107,12 +107,10 @@ public class SocialMediaController {
     }
       
      /* 
-      * TODO: GET localhost:8080/messages/{message_id} : retrieve a message by its ID
       * Handler to retrieve a message by its ID.
       * If successful: 200
       */
     private void getMessageHandler(Context ctx) throws JsonProcessingException {
-        // int messageID = Integer.parseInt(ctx.body());
         int messageID = Integer.parseInt(ctx.pathParam("message_id"));
         Message message = messageService.findMessageByID(messageID);
 
@@ -129,7 +127,14 @@ public class SocialMediaController {
       * If successful: 200
       */
     private void deleteMessageHandler(Context ctx) {
+        int messageID = Integer.parseInt(ctx.pathParam("message_id"));
+        Message message = messageService.deleteMessageByID(messageID);
 
+        if (message != null) {
+            ctx.json(message);
+        } else {
+            ctx.status(200).result("");
+        }
     }
 
      /* 
