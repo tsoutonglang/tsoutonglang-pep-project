@@ -122,7 +122,6 @@ public class SocialMediaController {
     }
 
      /* 
-      * TODO: DELETE localhost:8080/messages/{message_id} : delete a message identified by a message ID
       * Handler to delete a message by its ID.
       * If successful: 200
       */
@@ -143,8 +142,16 @@ public class SocialMediaController {
       * If successful: 200
       * If not successful: 400
       */
-    private void patchMessageHandler(Context ctx) {
+    private void patchMessageHandler(Context ctx) throws JsonProcessingException {
+        int messageID = Integer.parseInt(ctx.pathParam("message_id"));
+        String newMessageText = mapper.readTree(ctx.body()).get("message_text").asText();
+        Message message = messageService.updateMessage(messageID, newMessageText);
 
+        if (message != null) {
+            ctx.json(message);
+        } else {
+            ctx.status(400);
+        }
     }
       
      /*

@@ -102,7 +102,6 @@ public class MessageDAO {
     }
 
     /* 
-     * TODO: Delete a message by its ID
      * @return Successful deletion
      */
     public Message deleteMessage(int messageID) {
@@ -142,6 +141,38 @@ public class MessageDAO {
      * TODO: Update a message by its ID
      * @return Message object
      */
+    public Message updateMessage(int messageID, String updatedText) {
+        try {
+            // Search for message
+            String sql = "SELECT * FROM message WHERE message_id = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, messageID);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Message foundMessage = new Message(
+                    rs.getInt("message_id"),
+                    rs.getInt("posted_by"),
+                    rs.getString("message_text"),
+                    rs.getLong("time_posted_epoch")
+                );
+                foundMessage.setMessage_text(updatedText);
+
+                // Update message
+                sql = "UPDATE message SET message_text = ? WHERE message_id = ?";
+                ps = connection.prepareStatement(sql);
+                ps.setString(1, updatedText);
+                ps.setInt(2, messageID);
+                ps.executeUpdate();
+
+                return foundMessage;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return null;
+    }
 
     /* 
      * TODO: Retrieve all messages by a user

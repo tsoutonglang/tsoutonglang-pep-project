@@ -66,7 +66,6 @@ public class MessageService {
     }
 
     /* 
-     * TODO: Delete a message by its ID
      * @return Successful deletion
      */
     public Message deleteMessageByID(int messageID) {
@@ -79,6 +78,31 @@ public class MessageService {
      * TODO: Update a message by its ID
      * @return Message object
      */
+    public Message updateMessage(int messageID, String updatedText) {
+        // Message should not be blank
+        if (updatedText.isBlank()) {
+            System.out.println("Message is blank");
+            return null;
+        }
+
+        // Message should be less than 255 characters
+        if (updatedText.length() > 255) {
+            System.out.println("Message is too long");
+            return null;
+        }
+
+        System.out.println("Message ID: " + messageID);
+        System.out.println("Message Text: " + updatedText);
+
+        // Message should exist. If found, update the message
+        if (messageDAO.findMessagesByID(messageID) != null) {
+            System.out.println("Message updated");
+            return messageDAO.updateMessage(messageID, updatedText);
+        } else {
+            System.out.println("Message not found");
+            return null;
+        }
+    }
 
     /* 
      * TODO: Retrieve all messages by a user
